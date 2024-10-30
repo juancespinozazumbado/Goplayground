@@ -50,7 +50,6 @@ func LookLowerValue(sales [7]int) (int, int) {
 			lower = sales[i] // set the higest to current value
 			index = i
 		}
-
 	}
 
 	return lower, index
