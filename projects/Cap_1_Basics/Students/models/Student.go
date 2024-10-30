@@ -11,7 +11,6 @@ type Student struct {
 func (student *Student) AddGrade(grade float64) {
 
 	student.Grades = append(student.Grades, grade)
-
 }
 
 func CalculateAverage(student Student) (float64, bool) {
@@ -27,13 +26,11 @@ func CalculateAverage(student Student) (float64, bool) {
 	for _, grade := range grades {
 
 		sum += grade
-
 	}
 
 	average = sum / float64(length)
 
 	return average, true
-
 }
 
 func GetMinMaxGrade(student Student) (float64, float64, bool) {
@@ -55,15 +52,12 @@ func GetMinMaxGrade(student Student) (float64, float64, bool) {
 		if min > grade {
 			min = grade
 		}
-
 	}
 
 	return max, min, true
-
 }
 
 func DisplayStudentInfo(student Student) {
 
 	fmt.Printf("Student data: %+v\n", student)
-
 }
