@@ -64,6 +64,6 @@ func GetMinMaxGrade(student Student) (float64, float64, bool) {
 
 func DisplayStudentInfo(student Student) {
 
-	fmt.Printf("Student data: %+v", student)
+	fmt.Printf("Student data: %+v\n", student)
 
 }

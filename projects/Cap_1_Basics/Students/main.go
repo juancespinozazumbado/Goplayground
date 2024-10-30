@@ -25,7 +25,7 @@ func main() {
 		fmt.Printf("Canot calculate average: %f", average)
 	}
 
-	min, max, canCalculate := models.GetMinMaxGrade(student)
+	max, min, canCalculate := models.GetMinMaxGrade(student)
 
 	if canCalculate {
 
