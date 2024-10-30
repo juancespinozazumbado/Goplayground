@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"students/models"
 )
 
@@ -12,9 +13,14 @@ func main() {
 
 	student := models.Student{ID: 1212, Age: 23}
 
-	student.AddGrade(50.5)
-	student.AddGrade(100)
-	student.AddGrade(80.5)
+	for i := 0; i < 10; i++ {
+		student.AddGrade((rand.Float64()*100 + float64(i)))
+
+	}
+
+	// student.AddGrade(50.5)
+	// student.AddGrade(100)
+	// student.AddGrade(80.5)
 
 	models.DisplayStudentInfo(student)
 
