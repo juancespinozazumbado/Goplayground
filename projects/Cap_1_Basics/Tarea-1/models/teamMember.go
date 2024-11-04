@@ -27,13 +27,13 @@ func (member *TeamMember) UpdateTaskStatus(taskTitle string, newStatus string) b
 		if task.Title == taskTitle {
 
 			task.Status = newStatus
-			fmt.Printf("The status of the task %s has change", taskTitle)
+			fmt.Printf("The status of %s's task %s  has change\n", member.Name, taskTitle)
 			return true
 		}
 	}
 
 	//En caso de no encontrar la tarea devuelve false
-	fmt.Printf("The task with a title %s was not fund!", taskTitle)
+	fmt.Printf("The task with a title %s was not fund!\n", taskTitle)
 	return false
 
 }
