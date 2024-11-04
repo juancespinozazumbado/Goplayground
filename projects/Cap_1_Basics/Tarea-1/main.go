@@ -10,45 +10,30 @@ func main() {
 	db := make(map[string]*models.TeamMember)
 
 	alice := &models.TeamMember{Name: "Alice"}
-	boob := &models.TeamMember{Name: "Boob"}
+	boob := &models.TeamMember{Name: "Bob"}
+	maria := &models.TeamMember{Name: "Maria"}
 
 	db["Alice"] = alice
 	db["Boob"] = boob
+	db["Maria"] = maria
 
 	alice.AddTask("taskManagmant")
 	alice.AddTask("Change password")
 
+	db["Maria"].AddTask("Do Homework")
+	db["Maria"].UpdateTaskStatus("Do Homework", "Done")
+
 	alice.UpdateTaskStatus("taskManagmant", "done")
 
-	fmt.Println("Tasks *********  ")
-
-	DisplayAllTasks(db["Alice"])
-
-	DisplayAllMembers(db)
-
-}
-
-func DisplayAllTasks(member *models.TeamMember) {
-
-	if len(member.Tasks) > 0 {
-
-		fmt.Printf("%s tasks:\n", member.Name)
-
-		for i, task := range member.Tasks {
-
-			fmt.Printf("task %d : %+v\n", i+1, task)
-		}
-	} else {
-		fmt.Printf("memeber %s didn't have any task yet\n", member.Name)
-
-	}
-}
-
-func DisplayAllMembers(db map[string]*models.TeamMember) {
+	fmt.Println("showing all task in the team...: ")
 
 	for _, member := range db {
-		fmt.Printf("Member: %s\n", member.Name)
-		DisplayAllTasks(member)
 
+		models.DisplayAllTasks(member)
 	}
+
+	fmt.Println("showing all team members.... ")
+
+	models.DisplayAllMembers(db)
+
 }
