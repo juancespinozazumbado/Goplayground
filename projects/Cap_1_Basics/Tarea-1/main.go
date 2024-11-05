@@ -35,7 +35,7 @@ func main() {
 	alice.UpdateTaskStatus("Write report", "done")
 
 	// intenta actualizar el estado de una tarea que no existe
-	db["Maria"].UpdateTaskStatus("Rendom Task", "Done")
+	db["Maria"].UpdateTaskStatus("Random Task", "Done")
 	//Actualiza estado de tarea Do homework de maria
 	db["Maria"].UpdateTaskStatus("Do Homework", "Done")
 
