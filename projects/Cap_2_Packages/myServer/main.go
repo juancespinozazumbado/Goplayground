@@ -15,8 +15,8 @@ func main() {
 
 	handlerParam := func(w http.ResponseWriter, request *http.Request) {
 
-		query := request.URL.Query()["Name"][0]
-		fmt.Fprintf(w, "Hellow %s", query)
+		name := request.URL.Query().Get("Name")
+		fmt.Fprintf(w, "Hellow %s", name)
 	}
 
 	http.HandleFunc("/hellow", handler)
