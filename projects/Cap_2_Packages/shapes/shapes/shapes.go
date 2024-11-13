@@ -1,5 +1,7 @@
 package shapes
 
+import "math"
+
 type Shape interface {
 	Area() float64
 }
@@ -28,6 +30,6 @@ func (c *Triangle) Area() float64 {
 }
 
 func (c *Circle) Area() float64 {
-	const pi = 3.14
+	const pi = math.Phi
 	return c.Radius * pi * pi
 }
