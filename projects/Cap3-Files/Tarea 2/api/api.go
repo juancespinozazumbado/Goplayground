@@ -42,6 +42,7 @@ func GetAnimalsHandler(writer http.ResponseWriter, request *http.Request) {
 	animals := DB.GetAnimals()
 	info := ""
 
+	//if want to filter by type
 	animalType := request.URL.Query().Get("type")
 	if animalType != "" {
 		if animalType != "cat" && animalType != "dog" && animalType != "bird" {
@@ -50,6 +51,7 @@ func GetAnimalsHandler(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 
+		//filter by type animals
 		animals := DB.GetAnimalsByType(animalType)
 		info += formatAnimalinfo(animals)
 
@@ -150,7 +152,7 @@ func DeleteAnimalByIdHandler(writer http.ResponseWriter, request *http.Request) 
 	if exist {
 
 		if DB.DeleteAnimal(id) {
-			info += `{"Sucess": "Animal with given id"` + " " + id + "  deleted" + "}"
+			info += `{"Sucess": "Animal with given id` + " " + id + ` deleted"` + "}"
 		}
 
 	} else {
