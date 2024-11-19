@@ -7,20 +7,12 @@ import (
 	"animals/animal/dog"
 	"animals/data"
 	"fmt"
-	"html"
 	"net/http"
 )
 
 var DB *data.MemoryDb
 
-func HandleAnimal(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-}
-
-func GetAnimalsHandler(w http.ResponseWriter, r *http.Request) {
-
-	// set animals data
-	animals := DB.GetAnimals()
+func formatAnimalinfo(animals []animal.Animal) string {
 	info := "{\n"
 	if len(animals) == 0 {
 		info += `"data": []`
@@ -41,12 +33,37 @@ func GetAnimalsHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 	info += "}"
+	return info
+}
 
-	fmt.Fprint(w, info)
+func GetAnimalsHandler(writer http.ResponseWriter, request *http.Request) {
+
+	// set animals data
+	animals := DB.GetAnimals()
+	info := ""
+
+	animalType := request.URL.Query().Get("type")
+	if animalType != "" {
+		if animalType != "cat" && animalType != "dog" && animalType != "bird" {
+			info += `{"Error": "Unsuported Animal type !"}`
+			fmt.Fprint(writer, info)
+			return
+		}
+
+		animals := DB.GetAnimalsByType(animalType)
+		info += formatAnimalinfo(animals)
+
+		fmt.Fprint(writer, info)
+		return
+	} else {
+		info += formatAnimalinfo(animals)
+
+		fmt.Fprint(writer, info)
+	}
 
 }
 
-func AddAnimal(writer http.ResponseWriter, request *http.Request) {
+func ProcessAnimalHandler(writer http.ResponseWriter, request *http.Request) {
 
 	info := ""
 	typeAnimal := request.URL.Query().Get("type")
@@ -87,6 +104,7 @@ func DescribeAnimalHandler(writer http.ResponseWriter, request *http.Request) {
 	case "cat":
 		cat := cat.Cat{Name: name, Color: attr}
 		DB.AddAnimal(name, cat)
+		info = animal.DescribeAnimal(cat)
 	case "bird":
 		bird := bird.Bird{Name: name, WingSpan: attr}
 		DB.AddAnimal(name, bird)
@@ -95,6 +113,50 @@ func DescribeAnimalHandler(writer http.ResponseWriter, request *http.Request) {
 		info = animal.DescribeAnimal(typeAnimal)
 
 	}
+	fmt.Fprint(writer, info)
+
+}
+
+/// others methods
+
+func GetAnimalByIdHandler(writer http.ResponseWriter, request *http.Request) {
+	info := ""
+	id := request.URL.Query().Get("id")
+	if id == "" {
+		http.Error(writer, "ID is required", http.StatusBadRequest)
+		return
+	}
+	a, exist := DB.GetAnimal(id)
+	if exist {
+
+		info += animal.GetAnimalInfo(a)
+	} else {
+		info += `{"Error": "Animal with given id does not exist!"}`
+	}
+
+	fmt.Fprint(writer, info)
+
+}
+
+func DeleteAnimalByIdHandler(writer http.ResponseWriter, request *http.Request) {
+	info := ""
+	id := request.URL.Query().Get("id")
+	if id == "" {
+		http.Error(writer, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	_, exist := DB.GetAnimal(id)
+	if exist {
+
+		if DB.DeleteAnimal(id) {
+			info += `{"Sucess": "Animal with given id"` + " " + id + "  deleted" + "}"
+		}
+
+	} else {
+		info += `{"Error": "Animal with given id does not exist!"}`
+	}
+
 	fmt.Fprint(writer, info)
 
 }

@@ -2,6 +2,9 @@ package data
 
 import (
 	"animals/animal"
+	"animals/animal/bird"
+	"animals/animal/cat"
+	"animals/animal/dog"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -61,4 +64,39 @@ func (db *MemoryDb) DeleteAnimal(id string) bool {
 
 	}
 	return false
+}
+
+func (db *MemoryDb) GetAnimalsByType(animalType string) []animal.Animal {
+
+	animals := db.GetAnimals()
+	var filterAnimals []animal.Animal
+
+	if len(animals) > 0 {
+		for _, animal := range animals {
+			switch animalType {
+			case "dog":
+				value, ok := animal.(dog.Dog)
+				if ok {
+					filterAnimals = append(filterAnimals, value)
+				}
+			case "cat":
+
+				value, ok := animal.(cat.Cat)
+				if ok {
+					filterAnimals = append(filterAnimals, value)
+				}
+			case "bird":
+
+				value, ok := animal.(bird.Bird)
+				if ok {
+					filterAnimals = append(filterAnimals, value)
+				}
+			default:
+
+			}
+		}
+	}
+
+	return filterAnimals
+
 }
