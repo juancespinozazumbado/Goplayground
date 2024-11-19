@@ -17,15 +17,15 @@ func GetAnimalInfo(animal Animal) string {
 	switch value := animal.(type) {
 	case dog.Dog:
 		info += "{\n" + fmt.Sprintf(`  "name": "%s",`, value.Name) + "\n" + fmt.Sprintf(`  "Breed": "%s",`, value.Breed) + "\n"
-		info += `  "Methods": {` + "\n" + fmt.Sprintf(`   "Speak": "%s", `, value.Speak()) + "\n" + fmt.Sprintf(`   "Category": "%s", `, value.Category())
+		info += `  "Methods": {` + "\n" + fmt.Sprintf(`   "Speak": "%s", `, value.Speak()) + "\n" + fmt.Sprintf(`   "Category": "%s" `, value.Category())
 		info += "\n   }" + "\n" + " }"
 	case cat.Cat:
 		info += "{\n" + fmt.Sprintf(`  "name": "%s",`, value.Name) + "\n" + fmt.Sprintf(`  "Color": "%s",`, value.Color) + "\n"
-		info += `  "Methods": {` + "\n" + fmt.Sprintf(`   "Speak": "%s", `, value.Speak()) + "\n" + fmt.Sprintf(`   "Category": "%s", `, value.Category())
+		info += `  "Methods": {` + "\n" + fmt.Sprintf(`   "Speak": "%s", `, value.Speak()) + "\n" + fmt.Sprintf(`   "Category": "%s" `, value.Category())
 		info += "\n   }" + "\n" + " }"
 	case bird.Bird:
 		info += "{\n" + fmt.Sprintf(`  "name": "%s",`, value.Name) + "\n" + fmt.Sprintf(`  "WingSpan": "%s",`, value.WingSpan) + "\n"
-		info += `  "Methods": {` + "\n" + fmt.Sprintf(`   "Speak": "%s", `, value.Speak()) + "\n" + fmt.Sprintf(`   "Category": "%s", `, value.Category())
+		info += `  "Methods": {` + "\n" + fmt.Sprintf(`   "Speak": "%s", `, value.Speak()) + "\n" + fmt.Sprintf(`   "Category": "%s" `, value.Category())
 		info += "\n   }" + "\n" + " }"
 	default:
 		info += `{"Error":"Animal type not found"}`
@@ -51,8 +51,7 @@ func ProcessAnimal(input interface{}) string {
 
 func DescribeAnimal(animal interface{}) string {
 	info := ""
-	//v, ok := animal.(Animal)
-	// if ok {
+
 	switch t := animal.(type) {
 	case dog.Dog:
 		info += "{\n" + `  "Type" : "Dog"` + "\n}"
@@ -67,8 +66,6 @@ func DescribeAnimal(animal interface{}) string {
 		info += "{\n" + `  "Error" : "input doesn't implement Animal interface."` + "\n}"
 
 	}
-
-	//}
 
 	return info
 }

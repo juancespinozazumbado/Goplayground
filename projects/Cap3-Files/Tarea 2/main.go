@@ -1,44 +1,23 @@
 package main
 
 import (
-	"animals/animal"
-	"animals/animal/bird"
-	"animals/animal/cat"
-	"animals/animal/dog"
-	"fmt"
+	"animals/api"
+	"animals/data"
+	"net/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
 
-	animals := []animal.Animal{
-		cat.Cat{Name: "Tom", Color: "Gray"},
-		bird.Bird{Name: "Kity", WingSpan: "FFFFD"},
-	}
+	db := data.NewDB()
+	api.DB = db
 
-	tom := dog.Dog{Name: "Tom", Breed: "Chiken"}
-	animals = append(animals, tom)
+	http.HandleFunc("/animals", api.GetAnimalsHandler)
+	http.HandleFunc("/process", api.AddAnimal)
+	http.HandleFunc("/describe", api.DescribeAnimalHandler)
 
-	info := "[\n"
-
-	for _, current := range animals {
-		info += " " + animal.GetAnimalInfo(current) + ",\n"
-	}
-	info += "]"
-	fmt.Println(info)
-
-	for _, a := range animals {
-
-		fmt.Println(animal.DescribeAnimal(a))
-
-	}
-
-	for _, a := range animals {
-
-		fmt.Println(animal.ProcessAnimal(a))
-
-	}
-
-	fmt.Println(animal.ProcessAnimal("Zorro"))
-	fmt.Println(animal.DescribeAnimal("Perico"))
+	log.Info("Server listening on...:8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
