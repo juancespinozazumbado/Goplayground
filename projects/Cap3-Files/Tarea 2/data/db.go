@@ -13,6 +13,7 @@ type MemoryDb struct {
 	data map[string]animal.Animal
 }
 
+// Crea la DB en memoria
 func NewDB() *MemoryDb {
 
 	return &MemoryDb{data: make(map[string]animal.Animal)}
