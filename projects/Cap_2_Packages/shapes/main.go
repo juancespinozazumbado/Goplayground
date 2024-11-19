@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"shapes/shapes"
 
 	log "github.com/sirupsen/logrus"
@@ -20,19 +21,26 @@ func main() {
 
 	showShapeArea(shapesArray)
 
+	validateShapeSwitch(circle)
+	validateShapeSwitch(rectangle)
+	validateShapeSwitch(triangle)
+	validateShapeSwitch("Any")
+
+	http.Handle("/shapes", nil)
+
+	http.ListenAndServe(":8080", nil)
+
 }
 
 func showShapeArea(shapes []shapes.Shape) {
-
-	// log.WithFields(log.Fields{
-	// 	"Section": "Testing interfaces",
-	// }).Info("Starting the app...")
 
 	log.Info(shapes)
 
 	for _, shape := range shapes {
 		if validateShape(shape) {
 			log.Info(shape.Area())
+		} else {
+			log.Error("input doesn't implement the shape interface", shape)
 		}
 
 	}
@@ -45,4 +53,36 @@ func validateShape(input interface{}) bool {
 
 	_, ok := input.(shapes.Shape)
 	return ok
+}
+
+func validateShapeSwitch(input interface{}) {
+
+	switch i := input.(type) {
+	case *shapes.Rectangle:
+		log.WithFields(log.Fields{
+			"Type":  "Rectangule",
+			"Long":  i.Long,
+			"Width": i.Width,
+			"Area":  i.Area(),
+		}).Info("info of the shape ", input)
+
+	case *shapes.Circle:
+		log.WithFields(log.Fields{
+			"Type":   "Circle",
+			"Radius": i.Radius,
+			"Area":   i.Area(),
+		}).Info("info of the shape ", input)
+
+	case *shapes.Triangle:
+		log.WithFields(log.Fields{
+			"Type":  "Triangle",
+			"Base":  i.Base,
+			"Higth": i.Higt,
+			"Area":  i.Area(),
+		}).Info("info of the shape ", input)
+
+	default:
+		log.Error("input doesnt imnplement interface shape ", i)
+
+	}
 }
