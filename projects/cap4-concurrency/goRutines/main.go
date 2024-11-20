@@ -7,17 +7,38 @@ import (
 
 func main() {
 
-	car := &Vehicule{}
+	ch := make(chan interface{})
+	go func() {
+		listener(ch)
+
+	}()
+
+	ch <- 3
+	ch <- 11.5
+	ch <- "Hellow"
+	ch <- true
+
+	//car := &Vehicule{}
 	// car.setStructure()
 	// car.setDoors()
 	// car.setEngine()
 	// car.setElectronic()
 
-	go car.setStructure()
-	go car.setDoors()
-	go car.setEngine()
-	go car.setElectronic()
-	time.Sleep(2 * time.Second)
+	// go car.setDoors()
+	// go car.setEngine()
+	// go car.setElectronic()
+
+	// go also suport anonymous funcs
+	// go func() {
+	// 	fmt.Println("Somethin is hapening...")
+	// 	car.setStructure()
+	// 	car.setDoors()
+	// 	car.setEngine()
+	// 	car.setElectronic()
+	// 	car.setTires()
+	// }()
+
+	time.Sleep(11 * time.Second)
 }
 
 type Vehicule struct {
@@ -25,6 +46,7 @@ type Vehicule struct {
 	doors       bool
 	engine      bool
 	electronics bool
+	tires       bool
 }
 
 func (v *Vehicule) setStructure() {
@@ -33,7 +55,7 @@ func (v *Vehicule) setStructure() {
 	fmt.Println("Structure set")
 }
 func (v *Vehicule) setDoors() {
-	time.Sleep(1 * time.Second)
+	time.Sleep(4 * time.Second)
 	v.doors = true
 	fmt.Println("Doors set")
 }
@@ -43,9 +65,15 @@ func (v *Vehicule) setEngine() {
 	fmt.Println("Engine set")
 }
 func (v *Vehicule) setElectronic() {
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 	v.electronics = true
 	fmt.Println("Electronic set")
+}
+
+func (v *Vehicule) setTires() {
+	time.Sleep(4 * time.Second)
+	v.tires = true
+	fmt.Println("Tires set")
 }
 
 func printNumbers() {
@@ -53,5 +81,15 @@ func printNumbers() {
 		// awiat 1 seconds to print the value
 		time.Sleep(1 * time.Second)
 		fmt.Println(i)
+	}
+}
+
+///chanels
+
+func listener(ch chan interface{}) {
+
+	for chanVal := range ch {
+
+		fmt.Printf("Value in the channel is %+v \n", chanVal)
 	}
 }
