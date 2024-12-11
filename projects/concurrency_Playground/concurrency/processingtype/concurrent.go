@@ -68,6 +68,8 @@ func (c *ConcurrentProcessor) Process() {
 	//************************************************************************//
 	// code here
 
+	filesWG.Wait()
+
 	closeLineByLineResultChannel <- true
 	close(lineByLineResultChannel)
 
@@ -122,6 +124,7 @@ func (c *ConcurrentProcessor) processFile(fileName string, lineByLineResultChann
 		//code here
 		//************************************************************************//
 		line := scanner.Text()
+		linesWG.Add(1)
 
 		go c.processLine(fileName, line, lineByLineResultChannel, &linesWG)
 	}
