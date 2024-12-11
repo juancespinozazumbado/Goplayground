@@ -31,7 +31,7 @@ import (
 )
 
 func main() {
-	useConcurrency := false
+	useConcurrency := true
 
 	if useConcurrency {
 		println("Using concurrency")
@@ -40,6 +40,9 @@ func main() {
 		//Step 1: Create a new ConcurrentProcessor and hit Process()
 		//************************************************************************//
 		//code here
+
+		consurrenProcessor := processingtype.NewConcurrentProcessor()
+		consurrenProcessor.Process()
 
 	} else {
 		println("Using Sequential")
