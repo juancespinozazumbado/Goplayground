@@ -7,16 +7,28 @@ import (
 
 func main() {
 
-	ch := make(chan interface{})
-	go func() {
-		listener(ch)
+	result := make(chan int)
+	go sum(2, 5, result)
 
-	}()
+	sumResult := <-result
 
-	ch <- 3
-	ch <- 11.5
-	ch <- "Hellow"
-	ch <- true
+	fmt.Printf("REsult recived from chanel %+v \n", sumResult)
+
+	// go func() {
+	// 	listener(ch)
+
+	// }()
+
+	// fmt.Println("Queue value")
+	// ch <- 3
+	// fmt.Println("Queue value")
+	// ch <- 11.5
+	// fmt.Println("Queue value")
+	// ch <- "Hellow"
+	// fmt.Println("Queue value")
+	// ch <- true
+	// fmt.Println("Queue value")
+	// ch <- 'A'
 
 	//car := &Vehicule{}
 	// car.setStructure()
@@ -38,7 +50,13 @@ func main() {
 	// 	car.setTires()
 	// }()
 
-	time.Sleep(11 * time.Second)
+	time.Sleep(5 * time.Second)
+}
+
+func sum(a, b int, result chan int) {
+
+	time.Sleep(3 * time.Second)
+	result <- a + b
 }
 
 type Vehicule struct {
