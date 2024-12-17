@@ -41,7 +41,7 @@ func (c *SequentialProcessor) Process() {
 		//code here
 
 		sum := c.processFile(file.Name())
-		result = sum
+		result += sum
 	}
 
 	elapsed := time.Since(startTime)

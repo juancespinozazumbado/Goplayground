@@ -68,9 +68,9 @@ func (c *ConcurrentProcessor) Process() {
 	//************************************************************************//
 	// code here
 
-	filesWG.Wait()
+	filesWG.Wait() // wiat until all files are opened
 
-	closeLineByLineResultChannel <- true
+	closeLineByLineResultChannel <- true //asing true to channel to break the for loop
 	close(lineByLineResultChannel)
 
 	mu.Lock()
@@ -94,10 +94,14 @@ func (c *ConcurrentProcessor) listenToEachLine(lineByLineResultChannel <-chan fi
 			//************************************************************************//
 			//code here
 			//************************************************************************//
+			// mu.lock() and Unlok() needed to prevent go routines to acces resource at same time!!
+			mu.Lock()
 			c.results[result.fileName] += result.result
+			mu.Unlock()
 			//************************************************************************//
 			//code here
 			//************************************************************************//
+
 		case <-closeLineByLineResultChannel:
 			break
 		}
@@ -123,8 +127,9 @@ func (c *ConcurrentProcessor) processFile(fileName string, lineByLineResultChann
 		//************************************************************************//
 		//code here
 		//************************************************************************//
-		line := scanner.Text()
+
 		linesWG.Add(1)
+		line := scanner.Text()
 
 		go c.processLine(fileName, line, lineByLineResultChannel, &linesWG)
 	}
