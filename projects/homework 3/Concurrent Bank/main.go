@@ -2,8 +2,9 @@ package main
 
 import (
 	transactions "ConcurrentBank/Transactions"
-	"fmt"
 	"sync"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var wg sync.WaitGroup
@@ -18,20 +19,29 @@ func main() {
 	processor := transactions.NewTransactionProcessor(trascOutCHannel, ResponseChan)
 	reciever := transactions.NewTransactionReceiver(trascInvCHannel, trascOutCHannel)
 
-	fmt.Printf("Reciever: %+v\n", reciever)
-	fmt.Printf("Processor: %+v\n", processor)
-	fmt.Printf("Hanlder: %+v\n", handler)
+	//log.SetLevel(log.TraceLevel)
+	log.Info("Setting up components....")
 
-	fmt.Println("Process started....")
+	log.Info("Reciever:", reciever)
+	log.Info("Processor:", processor)
+	log.Info("Hanlder", handler)
+
+	log.Info("Process started....")
 
 	// sequence of transactions
-	wg.Add(4)
+	// add 4 to waitGroup case it is 4 transactions to proecess
+	wg.Add(8)
 
-	trascInvCHannel <- &transactions.Transaction{ID: "1234", Type: "deposit", Amount: 200}
+	trascInvCHannel <- &transactions.Transaction{ID: "1234", Type: "deposit", Amount: 200} // create a new instance of Transaction (pointer)
 	trascInvCHannel <- &transactions.Transaction{ID: "454545", Type: "deposit", Amount: 300}
 	trascInvCHannel <- &transactions.Transaction{ID: "1234", Type: "whithdraw", Amount: 1000}
 	trascInvCHannel <- &transactions.Transaction{ID: "1234", Type: "whithdraw", Amount: 400}
 
-	wg.Wait() // wait
+	trascInvCHannel <- &transactions.Transaction{ID: "1234", Type: "deposit", Amount: 500} // create a new instance of Transaction (pointer)
+	trascInvCHannel <- &transactions.Transaction{ID: "454545", Type: "deposit", Amount: 500}
+	trascInvCHannel <- &transactions.Transaction{ID: "1234", Type: "whithdraw", Amount: 30000}
+	trascInvCHannel <- &transactions.Transaction{ID: "1234", Type: "whithdraw", Amount: 10}
+
+	wg.Wait() // wait til each process finish
 
 }

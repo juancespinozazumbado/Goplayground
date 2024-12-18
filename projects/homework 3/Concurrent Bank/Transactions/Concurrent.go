@@ -1,8 +1,9 @@
 package transactions
 
 import (
-	"fmt"
 	"sync"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type TransactionReceiver struct {
@@ -27,7 +28,7 @@ func (t *TransactionReceiver) start() {
 		select {
 		case trans := <-t.InputChannel:
 
-			fmt.Printf("Recieved Transaction: %+v \n", trans)
+			log.Debug("Recieved Transaction:", trans)
 
 			t.OutputChannel <- trans
 			//close(t.OutputChannel)
@@ -64,6 +65,7 @@ func (t *TransactionProcessor) start() {
 		if trans.Type == "whithdraw" {
 			if trans.Amount > t.AccountBalance {
 				t.OutputChannel <- &TransactionResponse{TransactionId: trans.ID, Succes: false, NewBalance: 0, Message: "insuficient fonds !"}
+
 				Mutex.Unlock()
 				continue
 			}
@@ -78,7 +80,7 @@ func (t *TransactionProcessor) start() {
 		}
 		Mutex.Unlock()
 
-		fmt.Printf("Processed transaction %+v \n", trans)
+		log.Info("Processed transaction ", trans)
 	}
 
 	//}
@@ -102,7 +104,11 @@ func NewResponseHandler(ch chan *TransactionResponse, wg *sync.WaitGroup) *Respo
 
 func (t *ResponseHandler) start(wg *sync.WaitGroup) {
 	for resp := range t.InputChannel {
-		fmt.Printf("Transaccion result %+v \n", resp)
+		if !resp.Succes {
+			log.Error("Transaccion result ", resp)
+		}
+		// fmt.Printf("Transaccion result %+v \n", resp)
+		log.Info("Transaccion result ", resp)
 
 		wg.Done()
 	}
