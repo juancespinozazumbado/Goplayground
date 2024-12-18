@@ -6,37 +6,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type TransactionReceiver struct {
-	InputChannel  chan *Transaction
-	OutputChannel chan *Transaction
-}
-
-func NewTransactionReceiver(ch chan *Transaction, cr chan *Transaction) *TransactionReceiver {
-	reciever := &TransactionReceiver{
-		InputChannel:  ch,
-		OutputChannel: cr,
-	}
-	go reciever.start()
-	return reciever
-}
-
-func (t *TransactionReceiver) start() {
-
-	/// method to be implemented
-
-	for {
-		select {
-		case trans := <-t.InputChannel:
-
-			log.Debug("Recieved Transaction:", trans)
-
-			t.OutputChannel <- trans
-			//close(t.OutputChannel)
-		}
-	}
-
-}
-
 ////////// Processor  ////////////////////
 
 var Mutex sync.Mutex
@@ -85,31 +54,4 @@ func (t *TransactionProcessor) start() {
 
 	//}
 
-}
-
-////////// Reposnse Handler  ////////////////////
-
-type ResponseHandler struct {
-	InputChannel chan *TransactionResponse
-}
-
-func NewResponseHandler(ch chan *TransactionResponse, wg *sync.WaitGroup) *ResponseHandler {
-	handler := &ResponseHandler{
-		InputChannel: ch,
-	}
-
-	go handler.start(wg)
-	return handler
-}
-
-func (t *ResponseHandler) start(wg *sync.WaitGroup) {
-	for resp := range t.InputChannel {
-		if !resp.Succes {
-			log.Error("Transaccion result ", resp)
-		}
-		// fmt.Printf("Transaccion result %+v \n", resp)
-		log.Info("Transaccion result ", resp)
-
-		wg.Done()
-	}
 }
