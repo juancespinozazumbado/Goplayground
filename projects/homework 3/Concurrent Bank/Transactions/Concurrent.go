@@ -32,7 +32,6 @@ func (t *TransactionReceiver) start() {
 			t.OutputChannel <- trans
 			//close(t.OutputChannel)
 		}
-
 	}
 
 }
