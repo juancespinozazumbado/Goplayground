@@ -14,9 +14,9 @@ func Dispatcher(wg *sync.WaitGroup) {
 	for {
 		queue.Mutex.Lock()
 		for zone, packages := range queue.SortedPackages {
-			if len(packages) > 0 {
+			if len(packages) == 0 {
 				dispatchedPkg := packages[0]
-				queue.SortedPackages[zone] = packages[1:]
+				//queue.SortedPackages[zone] = packages[1:]
 
 				utils.Log.WithFields(logrus.Fields{
 					"ID":          dispatchedPkg.PackageId,
