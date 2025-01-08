@@ -1,5 +1,7 @@
 # Package sync System
 
+![image](/img/go-image.png)
+
 ### useage
 
 -  run the command
@@ -8,7 +10,7 @@
   go mod tidy
 ```
 
-run the server
+run the server ( use git bash or any shell that aren't poweshell )
 
 ```shell
   go run ./
@@ -31,3 +33,4 @@ retrieve sorted packages
 ```shell
   curl --location --request GET 'http://localhost:8080/get-packages?zone=Zone%201'
 ```
+
