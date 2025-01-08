@@ -1,6 +1,6 @@
 # Package sync System
 
-![image](/img/go-image.png)
+![image](/projects/homework_4/img/go-image.png)
 
 ### useage
 
