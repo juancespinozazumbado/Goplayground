@@ -14,6 +14,7 @@ import (
 var IncomingChannel = make(chan models.Package, 10)
 
 func AddPackage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	var pkg models.Package
 	if err := json.NewDecoder(r.Body).Decode(&pkg); err != nil {
 		utils.Log.WithError(err).Error("Failed to decode package payload")
@@ -34,6 +35,7 @@ func AddPackage(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPackages(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	query := r.URL.Query().Get("zone")
 	queue.Mutex.Lock()
 	defer queue.Mutex.Unlock()

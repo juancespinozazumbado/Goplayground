@@ -1,10 +1,10 @@
 package models
 
 type Package struct {
-	PackageId   int
-	SenderName  string
-	Destination string
-	Status      bool
+	PackageId   int    `json:"Id"`
+	SenderName  string `json:"SenderName"`
+	Destination string `json:"Destination"`
+	Status      bool   `json:"status"`
 }
 
 func NewPackage(id int, sourceName string, Destination string) *Package {
@@ -12,5 +12,4 @@ func NewPackage(id int, sourceName string, Destination string) *Package {
 		SenderName:  sourceName,
 		Destination: Destination,
 		Status:      false}
-
 }
